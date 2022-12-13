@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# Functional Requirement 1 (Site Architecture)
 # Adding Landing page and React app on '/shop' URL
 from django.views.generic import TemplateView
 

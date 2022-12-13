@@ -1,11 +1,14 @@
-from rest_framework.views import APIView
-from accounts.api.serializers import UserSerializer
+from rest_framework.generics import GenericAPIView
+from accounts.api.serializers import UserSerializer, ChangePasswordSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
-class UserAPI(APIView):
+# Functional requirement 5 (Create Account)
+# API to create new user account
+class UserAPI(GenericAPIView):
 
-    # saving a new user in the database
     def post(self, req):
     
         user = UserSerializer(data = req.data)
@@ -15,3 +18,21 @@ class UserAPI(APIView):
             return Response(user.data, status = status.HTTP_201_CREATED)
         
         return Response(user.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
+# Functional requirement 12 (Edit Account)
+# API to update password
+class ChangePasswordAPI(GenericAPIView):
+
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def put(self, req):
+        user = req.user
+        serializer = ChangePasswordSerializer(context = {'user': user}, data = req.data)
+
+        if serializer.is_valid():
+            serializer.update(user, serializer.validated_data)
+            return Response({'message': 'Password Updated'}, status = status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
