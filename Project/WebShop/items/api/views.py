@@ -6,6 +6,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from items.models import Item
 from items.api.paginators import ItemPaginator
+from rest_framework.filters import SearchFilter
 
 # Functional requirement 7 (Add item)
 # API to create card (authentication required)
@@ -34,14 +35,15 @@ class ListItemsAPI(GenericAPIView):
 
     def get(self, req):
 
-        items = Item.objects.all()
+        items = Item.objects.order_by('-date')
         page = self.paginate_queryset(items)
 
         if page:
-            response = ItemSerializer(page, many = True)
-            return self.get_paginated_response(response.data)
+            serializer = ItemSerializer(page, many = True)
+            response = self.get_paginated_response(serializer.data)
+            return Response(response.data, status = status.HTTP_200_OK)
         else:
-            return self.get_paginated_response([])
+            return Response([], status = status.HTTP_404_NOT_FOUND)
 
 # Functional requirement 13 (Display inventory)
 # API to get all the items (sale, sold, and brought) of the authenticated user
@@ -54,3 +56,27 @@ class ListInventoryAPI(GenericAPIView):
         items = Item.objects.filter(added_by = req.user.id)
         response = ItemSerializer(items, many = True)
         return Response(response.data, status = status.HTTP_200_OK)
+
+# Functional requirement 4 (Search)
+# API to search items by title
+class SearchItemAPI(GenericAPIView):
+
+    # todo search items on 'sale' not all
+
+    pagination_class = ItemPaginator
+
+    def get(self, req):
+        search_keyword = req.query_params['title']
+
+        if search_keyword:
+            items = Item.objects.filter(title__startswith = search_keyword)
+            page = self.paginate_queryset(items)
+
+            if page:
+                serializer = ItemSerializer(page, many=True)
+                response = self.get_paginated_response(serializer.data)
+                return Response(response.data, status = status.HTTP_200_OK)
+            else:
+                return Response([], status = status.HTTP_404_NOT_FOUND)
+        
+        return Response(status = status.HTTP_400_BAD_REQUEST)
