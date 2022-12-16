@@ -1,5 +1,5 @@
 from django.urls import path
-from accounts.api.views import UserAPI, ChangePasswordAPI
+from accounts.api.views import UserAPI, ChangePasswordAPI, PopulateDBAPI
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 urlpatterns = [
@@ -7,4 +7,5 @@ urlpatterns = [
     # Functional requirement 6 (Login)
     path('login/', TokenObtainPairView.as_view()),
     path('change-password/', ChangePasswordAPI.as_view()),
+    path('populateDB/', PopulateDBAPI.as_view()),
 ]
