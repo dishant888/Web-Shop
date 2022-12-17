@@ -8,6 +8,8 @@ from items.models import Item
 from items.api.serializers import ItemSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from django.core import mail
+from django.conf.global_settings import EMAIL_HOST_USER
 
 def get_cart_items(user):
 
@@ -67,6 +69,8 @@ class DeleteCartItem(GenericAPIView):
 
         return Response({'buyer': ['This item is not in the cart.']}, status = status.HTTP_400_BAD_REQUEST)
 
+# Functional requirement 10 (Pay)
+# API to buy items in the cart of the logged in user
 class BuyCartItemsAPI(GenericAPIView):
     
     permission_classes = [IsAuthenticated]
@@ -96,7 +100,8 @@ class BuyCartItemsAPI(GenericAPIView):
                 cart['price'] = item.price
                 # send notification of change in price
                 cart['notification'] = f'The price of {cart["title"]} has been updated from {cart["old_price"]} to {item.price}.'
-                return Response(cart_items, status = status.HTTP_205_RESET_CONTENT)
+                print(cart_items)
+                return Response(cart_items, status = status.HTTP_406_NOT_ACCEPTABLE)
 
             if not item.on_sale:
                 # send notification to remove item from cart as it is already sold
@@ -107,10 +112,22 @@ class BuyCartItemsAPI(GenericAPIView):
             cart_ids.append(cart['id'])
 
         # pay transaction if cart items are valid
-        Item.objects.filter(id__in = cart_item_ids).update(on_sale = False, buyer = user)
+        items = Item.objects.filter(id__in = cart_item_ids)
+        items.update(on_sale = False, buyer = user)
+
         # empty the cart
         Cart.objects.filter(id__in = cart_ids).delete()
-        # send email
-        
-        return Response([], status = status.HTTP_200_OK)
 
+        # send email
+        # to sellers (there can be multiple items in the cart belonging to different sellers so we need to send email one by one in each iteration)
+        order_details = ''
+        order_total = 0
+        for i, item in enumerate(items):
+            mail.send_mail(subject = 'New order received', message = f'Greetings {item.seller.username}, \n\nYou received a new order, {user.username} bought {item.title} for {item.price} euros. \n\nBR \nWebShop', from_email = EMAIL_HOST_USER, recipient_list = [item.seller.email])
+            order_details += f'{i+1}. {item.title} = {item.price} euros\n'
+            order_total += item.price
+
+        # to buyer (there will be a single buyer, so we need to send the email once)
+        mail.send_mail(subject = 'Thank you for shopping with us!', message = f'Greetings {user.username}, \n\nYour order detailes are as follows: \n{order_details}\nTotal amount = {round(order_total, 2)}\n\nBR \nWebShop', from_email = EMAIL_HOST_USER, recipient_list = [user.email])
+
+        return Response([], status = status.HTTP_200_OK)
