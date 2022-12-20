@@ -145,3 +145,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Adding react static folder
 STATICFILES_DIRS = [BASE_DIR / 'frontend' / 'build' / 'static']
+
+CORS_ORIGIN_ALLOW_ALL = True

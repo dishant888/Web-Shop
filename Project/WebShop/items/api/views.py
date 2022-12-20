@@ -82,7 +82,7 @@ class SearchItemAPI(GenericAPIView):
                 response = self.get_paginated_response(serializer.data)
                 return Response(response.data, status = status.HTTP_200_OK)
             else:
-                return Response([], status = status.HTTP_404_NOT_FOUND)
+                return Response({'results': []}, status = status.HTTP_200_OK)
 
         except Exception:
             return Response({'title': ['title query parameter is required.']}, status = status.HTTP_400_BAD_REQUEST)
