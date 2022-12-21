@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { ItemCard } from '../components';
 import { useContext } from 'react';
-import { Store } from '../store';
+import { Store } from '../Store';
 
 export default function HomePage() {
 
