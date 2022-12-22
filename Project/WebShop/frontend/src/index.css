@@ -1,5 +1,6 @@
 .navbar-nav .nav-link.active, .navbar-nav .show>.nav-link {
-  background-color: lightgray;
+  /* background-color: lightgray; */
+  background-color: #0456d1;
   border-radius: 5px;
   text-align: center;
 }

@@ -19,9 +19,9 @@ class UserAPI(GenericAPIView):
 
         if user.is_valid():
             user.save()
-            return Response(user.data, status = status.HTTP_201_CREATED)
+            return Response({"valid": True, "user": user.data}, status = status.HTTP_201_CREATED)
         
-        return Response(user.errors, status = status.HTTP_400_BAD_REQUEST)
+        return Response({"valid": False, "errors": user.errors}, status = status.HTTP_400_BAD_REQUEST)
 
 # Functional requirement 12 (Edit Account)
 # API to update password
