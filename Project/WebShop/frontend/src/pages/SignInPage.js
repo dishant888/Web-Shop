@@ -15,33 +15,30 @@ export default function SignInPage() {
   }
 
   const [formData, setFormData] = useState(initialFormState)
-
   const [errors, setErrors] = useState({})
-
   const { userToken, setUserToken } = useContext(LoginContext)
-
   const navigate = useNavigate()
 
   const handleChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value})
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const requestOptions = {method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(formData)}
-    try{
+    const requestOptions = { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(formData) }
+    try {
       let data = await (await fetch('http://127.0.0.1:8000/api/auth/login/', requestOptions)).json()
-      
-      if (!data.access){
+
+      if (!data.access) {
         setErrors(data)
-      }else {
+      } else {
         setErrors({})
         setFormData(initialFormState)
-        setUserToken({isLoggedIn: true, ...data})
-        navigate('/shop')  
+        setUserToken({ isLoggedIn: true, ...data })
+        navigate('/shop')
       }
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
   }
@@ -49,10 +46,10 @@ export default function SignInPage() {
   return (
     <Container>
       <Row>
-        <Col xs={{ span: 10, offset: 1 }} md={{ span: 6, offset: 3 }} lg={{span: 4, offset: 4}}>
-          <br/>
+        <Col xs={{ span: 10, offset: 1 }} md={{ span: 6, offset: 3 }} lg={{ span: 4, offset: 4 }}>
+          <br />
           <h2>Login</h2>
-          <br/>
+          <br />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicUsername">
               <Form.Label>Username</Form.Label>

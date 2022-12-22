@@ -39,6 +39,7 @@ export default function CartPage() {
                 <td>{index + 1}</td>
                 <td>{item.title}</td>
                 <td>€{item.price}</td>
+                <td>{item.notification}</td>
                 <td>
                     <Button size='sm' onClick={() => handleDelete(item.item_id)} variant='danger'>Remove</Button>
                 </td>
@@ -62,6 +63,7 @@ export default function CartPage() {
                                     <th>#</th>
                                     <th>Item</th>
                                     <th>Price</th>
+                                    <th></th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -75,6 +77,7 @@ export default function CartPage() {
                                     <th>
                                         €{Math.fround(total).toFixed(2)}
                                     </th>
+                                    <td></td>
                                     <td>
                                         <Button size='sm' onClick={handleBuy} variant='success'>Purchase</Button>
                                     </td>

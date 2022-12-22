@@ -1,11 +1,8 @@
 import { useContext, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink, Link } from "react-router-dom";
 import { useNavigate } from 'react-router';
 import { ItemContext, LoginContext } from '../Store';
@@ -38,9 +35,9 @@ function Navigation() {
   }
 
   return (
-    <Navbar bg="primary" expand="lg">
+    <Navbar bg="primary" variant='dark' expand="lg">
       <Container fluid>
-        <Navbar.Brand as={Link} className="text-light" to="/shop">Web Shop</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/shop">Web Shop</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav
@@ -48,16 +45,17 @@ function Navigation() {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link as={NavLink} className="text-light" to='/shop' >Home</Nav.Link>
+            <Nav.Link as={NavLink} to='/shop' >Home</Nav.Link>
 
             {userToken.isLoggedIn ? <>
-              <Nav.Link as={NavLink} className="text-light" to='/account' >Account</Nav.Link>
-              <Nav.Link as={NavLink} className="text-light" to='/myitems' >My Items</Nav.Link>
-              <Nav.Link as={NavLink} className="text-light" to='/cart' >Cart</Nav.Link>
-              <Nav.Link className="text-light" onClick={handleLogout} >Logout</Nav.Link>
+              <Nav.Link as={NavLink} to='/additem' >Add Item</Nav.Link>
+              <Nav.Link as={NavLink} to='/myitems' >My Items</Nav.Link>
+              <Nav.Link as={NavLink} to='/account' >Account</Nav.Link>
+              <Nav.Link as={NavLink} to='/cart' >Cart</Nav.Link>
+              <Nav.Link onClick={handleLogout} >Logout</Nav.Link>
             </> : <>
-              <Nav.Link as={NavLink} className="text-light" to='/signup' >Sign Up</Nav.Link>
-              <Nav.Link as={NavLink} className="text-light" to='/login' >Sign In</Nav.Link>
+              <Nav.Link as={NavLink} to='/signup' >Sign Up</Nav.Link>
+              <Nav.Link as={NavLink} to='/login' >Sign In</Nav.Link>
             </>}
           </Nav>
           <Form className="d-flex">

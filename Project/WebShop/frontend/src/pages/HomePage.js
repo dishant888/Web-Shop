@@ -2,11 +2,12 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { ItemCard } from '../components';
-import { useContext} from 'react';
+import { useContext, useEffect } from 'react';
 import { ItemContext } from '../Store';
 import Pagination from 'react-bootstrap/Pagination';
 
 export default function HomePage() {
+
 
   const { items, setItems } = useContext(ItemContext)
 
@@ -20,21 +21,30 @@ export default function HomePage() {
     setItems(data)
   }
 
+  const getItems = async () => {
+    let data = await (await fetch('http://127.0.0.1:8000/api/items/')).json()
+    setItems(data)
+  }
+
+  useEffect(() => {
+    getItems()
+  }, [])
+
   let list = items.results.map((item) =>
-    <Col key={item.id} xs={12} md={6} lg={4} xl={3} style={{textAlign: 'center'}}>
+    <Col key={item.id} xs={12} md={6} lg={4} xl={3} style={{ textAlign: 'center' }}>
       <ItemCard item={item} />
-      <br/>
+      <br />
     </Col>
   )
 
   return (
     <Container>
       <Row>
-        {list.length > 0 ? list: <h3>Item Not Found</h3>}
+        {list.length > 0 ? list : <h3>Item Not Found</h3>}
       </Row>
       <Row>
         <Col>
-          <br/>
+          <br />
           <Pagination>
             {items.previous && <Pagination.Prev onClick={getPreviousPage}> &#60; Previous</Pagination.Prev>}
             {items.next && <Pagination.Next onClick={getNextPage}>Next &#62;</Pagination.Next>}
