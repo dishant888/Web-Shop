@@ -4,30 +4,39 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HomePage, SignInPage, SignUpPage } from './pages';
 import { useContext, useEffect } from 'react';
 import { ItemContext } from './Store';
+import ProtectedRoutes from './components/ProtectedRoutes';
+import AccountPage from './pages/AccountPage';
+import MyItemsPage from './pages/MyItemsPage';
+import CartPage from './pages/CartPage';
 
 
 function App() {
 
-  const {setItems} = useContext(ItemContext)
-  
+  const { setItems } = useContext(ItemContext)
+
   const getItems = async () => {
     let data = await (await fetch('http://127.0.0.1:8000/api/items/')).json()
     setItems(data)
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     getItems()
-  },[])
+  }, [])
 
   return (
     <>
       <BrowserRouter>
-      <Navigation/>
-      <br/>
+        <Navigation />
+        <br />
         <Routes>
-          <Route  path='/shop' element={<HomePage/>} />
-          <Route  path='/signup' element={<SignUpPage/>} />
-          <Route  path='/login' element={<SignInPage/>} />
+          <Route element={<ProtectedRoutes />} >
+            <Route path='/account' element={<AccountPage />} />
+            <Route path='/myitems' element={<MyItemsPage />} />
+            <Route path='/cart' element={<CartPage />} />
+          </Route>
+          <Route path='/signup' element={<SignUpPage />} />
+          <Route path='/login' element={<SignInPage />} />
+          <Route path='/shop' element={<HomePage />} />
         </Routes>
       </BrowserRouter>
     </>

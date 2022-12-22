@@ -1,14 +1,8 @@
 import { createContext, useState } from "react";
 
-
-// export const Store = createContext({
-//     isLoading: false,
-//     items: [],
-//     setItems: () => {},
-// })
-
 export const ItemContext = createContext()
 export const LoginContext = createContext()
+export const CartContext = createContext()
 
 const initialItemState = {
     "count": 0,
@@ -23,19 +17,20 @@ const initialUserState = {
     refresh: ""
 }
 
-const Store = ({children}) => {
+const Store = ({ children }) => {
 
     const [items, setItems] = useState(initialItemState)
     const [userToken, setUserToken] = useState(initialUserState)
-
+    const [cart, setCart] = useState([])
 
     return (
-        <ItemContext.Provider value={{items, setItems}}>
-            <LoginContext.Provider value={{userToken, setUserToken}}>
-                {children}
+        <ItemContext.Provider value={{ items, setItems }}>
+            <LoginContext.Provider value={{ userToken, setUserToken }}>
+                <CartContext.Provider value={{ cart, setCart }}>
+                    {children}
+                </CartContext.Provider>
             </LoginContext.Provider>
         </ItemContext.Provider>
-
     )
 }
 

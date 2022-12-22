@@ -13,28 +13,28 @@ import { ItemContext, LoginContext } from '../Store';
 function Navigation() {
 
   const [keyword, setKeyword] = useState('')
-  const {setItems} = useContext(ItemContext)
+  const { setItems } = useContext(ItemContext)
   const { userToken, setUserToken } = useContext(LoginContext)
   const navigate = useNavigate()
 
   const handleInput = async (e) => {
     setKeyword(e.target.value)
-    
+
     try {
       let data = await (await fetch(`http://127.0.0.1:8000/api/items/search/?title=${e.target.value}`)).json()
       setItems(data)
-    } catch (e){
-      console.error("error" , e)
+    } catch (e) {
+      console.error("error", e)
     }
   }
 
   const handleLogout = () => {
-      setUserToken({
-        isLoggedIn: false,
-        access: "",
-        refresh: ""
-      })
-      navigate('/shop')
+    setUserToken({
+      isLoggedIn: false,
+      access: "",
+      refresh: ""
+    })
+    navigate('/shop')
   }
 
   return (
@@ -49,10 +49,16 @@ function Navigation() {
             navbarScroll
           >
             <Nav.Link as={NavLink} className="text-light" to='/shop' >Home</Nav.Link>
-            { userToken.isLoggedIn ? <><Nav.Link className="text-light" onClick={handleLogout} >Logout</Nav.Link></> : <>
-            <Nav.Link as={NavLink} className="text-light" to='/signup' >Sign Up</Nav.Link>
-            <Nav.Link as={NavLink} className="text-light" to='/login' >Sign In</Nav.Link>
-            </> }
+
+            {userToken.isLoggedIn ? <>
+              <Nav.Link as={NavLink} className="text-light" to='/account' >Account</Nav.Link>
+              <Nav.Link as={NavLink} className="text-light" to='/myitems' >My Items</Nav.Link>
+              <Nav.Link as={NavLink} className="text-light" to='/cart' >Cart</Nav.Link>
+              <Nav.Link className="text-light" onClick={handleLogout} >Logout</Nav.Link>
+            </> : <>
+              <Nav.Link as={NavLink} className="text-light" to='/signup' >Sign Up</Nav.Link>
+              <Nav.Link as={NavLink} className="text-light" to='/login' >Sign In</Nav.Link>
+            </>}
           </Nav>
           <Form className="d-flex">
             <Form.Control
