@@ -27,7 +27,7 @@ export default function AccountPage() {
 
     const requestOptions = { method: 'PUT', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${userToken.access}` }, body: JSON.stringify(formData) }
     let data = await (await fetch('http://127.0.0.1:8000/api/auth/change-password/', requestOptions)).json()
-    console.log(data);
+
     if (data.message) {
       setErrors({})
       setSuccess(data.message)
@@ -36,6 +36,10 @@ export default function AccountPage() {
       setErrors(data)
       setSuccess("")
     }
+
+    setTimeout(() => {
+      setSuccess("")
+    }, 1500)
   }
 
   return (
