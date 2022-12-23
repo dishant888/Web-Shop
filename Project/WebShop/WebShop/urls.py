@@ -19,7 +19,7 @@ from django.urls import path, include
 # Functional Requirement 1 (Site Architecture)
 # Adding Landing page and React app on '/shop' URL
 from django.views.generic import TemplateView
-from home.views import index
+from home.views import index, generateDB
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +28,7 @@ urlpatterns = [
     # Landing Page
     # path('', TemplateView.as_view(template_name='home.html')),
     path('', index),
+    path('generateDB/', generateDB),
     # APIs
     path("api/auth/", include('accounts.api.urls')),
     path("api/items/", include('items.api.urls')),

@@ -74,7 +74,7 @@ class SearchItemAPI(GenericAPIView):
         
         try:
             search_keyword = req.query_params['title']
-            items = Item.objects.filter(title__startswith = search_keyword).filter(on_sale = True)
+            items = Item.objects.filter(title__startswith = search_keyword).filter(on_sale = True).order_by('-date', '-id')
             page = self.paginate_queryset(items)
 
             if page:

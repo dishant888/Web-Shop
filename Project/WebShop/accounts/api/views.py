@@ -63,7 +63,8 @@ class PopulateDBAPI(GenericAPIView):
                     Item.objects.create(
                         title = random.choice(placeholder_titles), 
                         description = f'This is item number {j} added by {user_data["username"]}. {placeholder_text}', 
-                        price = round(random.uniform(10,100),2), seller = user_instance
+                        price = round(random.uniform(10,100),2), 
+                        seller = user_instance
                         )
                     item_no += 1
 

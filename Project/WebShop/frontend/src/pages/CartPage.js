@@ -27,8 +27,8 @@ export default function CartPage() {
     const handleBuy = async () => {
         const requestOptions = { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': `Bearer ${userToken.access}` } }
         let data = await (await fetch(`http://127.0.0.1:8000/api/cart/buy/`, requestOptions)).json()
-        console.log(data);
         setCart(data);
+        if (data.length == 0) { alert("Transaction Successful!") }
     }
 
     let total = 0

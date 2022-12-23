@@ -99,7 +99,7 @@ class BuyCartItemsAPI(GenericAPIView):
                 cart['old_price'] = cart['price']
                 cart['price'] = item.price
                 # send notification of change in price
-                cart['notification'] = f'The price of {cart["title"]} has been updated from {cart["old_price"]} to {item.price}.'
+                cart['notification'] = f'The price of {cart["title"]} has been updated from €{cart["old_price"]} to €{item.price}.'
                 print(cart_items)
                 return Response(cart_items, status = status.HTTP_406_NOT_ACCEPTABLE)
 
